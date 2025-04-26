@@ -19,3 +19,4 @@ token_data = {
 
 token = requests.post(url=TOKEN_ENDPOINT, headers=token_headers, data=token_data)
 print(token.json())
+print(token.request.headers)
