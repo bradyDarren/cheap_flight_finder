@@ -18,12 +18,18 @@ class Data_Manager:
         self.username = os.environ.get('USERNAME')
         self.password = os.environ.get('PASSWORD') 
         self.auth = HTTPBasicAuth(self.username, self.password)
+        # self.token = os.environ.get('BEARER_TOKEN') # if we use the BEARER method of auth.
         self.flight_data = {}
 
     def get_sheet_data(self):
 
+        # if we use the BEARER method of auth.
+        # headers = { 
+        #     'Authorization': f'Bearer {self.token}'
+        # }
+
         f_response = requests.get(url=FLIGHT_URL, 
-                                auth= self.auth
+                                auth= self.auth,
         )
         data = f_response.json()
         self.flight_data = data['prices']
