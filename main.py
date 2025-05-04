@@ -10,10 +10,12 @@ sheet = test.get_sheet_data()
 
 search = FlightSearch()
 
-for row in sheet: 
-    if row['iataCode'] == '':
-        row['iataCode'] = search.get_iatacode(row['city'])
-        time.sleep(2)
+# for row in sheet: 
+#     if row['iataCode'] == '':
+#         row['iataCode'] = search.get_iatacode(row['city'])
+#         time.sleep(2)
 
-test.flight_data = sheet
-test.change_iataCode()
+# test.flight_data = sheet
+# test.change_iataCode()
+
+pprint(search.search()['data'][0]['price']['grandTotal'])
