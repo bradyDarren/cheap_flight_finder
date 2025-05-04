@@ -9,6 +9,7 @@ load_dotenv()
 CORE_ENDPOINT = 'https://test.api.amadeus.com/v1'
 TOKEN_ENDPOINT = '/security/oauth2/token'
 CITY_SEARCH_ENDPOINT = '/reference-data/locations/cities'
+FLIGHT_OFFERS = 'https://test.api.amadeus.com/v2/shopping/flight-offers'
 
 class FlightSearch: 
 
@@ -64,6 +65,18 @@ class FlightSearch:
     
     def search(self):
         
+        headers = {
+            'Authorization': f'Bearer {self.token}'
+        }
 
+        flight_info = {
+            'originLocationCode': 'IAH',
+            'destinationLocationCode': 'PAR',
+            'departureDate': '2025-05-04',
+            'adults': 1,
+            'nonStop': 'true',
+            'currencyCode': 'USD',
+        }
 
-    
+        response = requests.get(url=f'{FLIGHT_OFFERS}', headers=headers, params=flight_info)
+        return response.json()
