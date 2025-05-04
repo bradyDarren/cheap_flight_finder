@@ -1,22 +1,69 @@
-# handles the communications to the Flight Search API. 
+# # handles the communications to the Flight Search API. 
 
 import requests
 import os
+from dotenv import load_dotenv
 
-API_KEY = os.environ.get("APP_KEY")
-API_SEC =  os.environ.get("APP_SEC")
-TOKEN_ENDPOINT = 'https://test.api.amadeus.com/v1/security/oauth2/token'
+load_dotenv()
 
-token_headers = { 
-    "Content-Type":"application/x-www-form-urlencoded",
-}
+CORE_ENDPOINT = 'https://test.api.amadeus.com/v1'
+TOKEN_ENDPOINT = '/security/oauth2/token'
+CITY_SEARCH_ENDPOINT = '/reference-data/locations/cities'
 
-token_data = { 
-    'grant_type':'client_credentials',
-    'client_id': API_KEY,
-    'client_secret': API_SEC,
-}
+class FlightSearch: 
 
-token = requests.post(url=TOKEN_ENDPOINT, headers=token_headers, data=token_data)
-print(token.json())
-print(token.request.headers)
+    def __init__(self):
+        self.api_key = os.environ.get('API_KEY')
+        self.api_secret = os.environ.get('API_SECRET')
+        self.token = self.get_new_token()
+
+    def get_new_token(self):
+
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+
+        body = {
+            'grant_type': 'client_credentials',
+            'client_id': self.api_key,
+            'client_secret': self.api_secret
+        }
+
+        response = requests.post(url=f'{CORE_ENDPOINT}{TOKEN_ENDPOINT}',
+                                 headers=headers,
+                                 data=body
+        )
+        token = response.json()['access_token']
+        return token
+
+    def get_iatacode(self, city_name):
+
+        headers = {
+            'Authorization': f'Bearer {self.token}'
+        }
+
+        datas = {
+            'keyword': city_name,
+        }
+
+        response = requests.get(url=f'{CORE_ENDPOINT}{CITY_SEARCH_ENDPOINT}',
+                                headers=headers,
+                                params=datas
+        )
+
+        try: 
+            iatacode = response.json()['data'][0]['iataCode']
+        except IndexError: 
+            print(f'IndexError: No airport code found for {city_name}')
+            return 'N/A'
+        except KeyError: 
+            print(f'KeyError: No airport code found for {city_name}')
+            return 'Not Found'
+        
+        return iatacode
+    
+    def search(self):
+        
+
+
+    
