@@ -72,7 +72,7 @@ class FlightSearch:
         flight_info = {
             'originLocationCode': 'IAH',
             'destinationLocationCode': 'PAR',
-            'departureDate': '2025-05-04',
+            'departureDate': '30',
             'adults': 1,
             'nonStop': 'true',
             'currencyCode': 'USD',
