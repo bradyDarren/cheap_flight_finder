@@ -7,3 +7,5 @@ class FlightData:
         self.departure_airport_code = airport_code
         self.flight_info = flight_info 
         
+    def find_cheapest_flight(self):
+        pass
